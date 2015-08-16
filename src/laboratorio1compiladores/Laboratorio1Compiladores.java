@@ -26,6 +26,10 @@ public class Laboratorio1Compiladores {
             System.out.println("Ingrese la expresión regular");
             String regEx = entrada.nextLine();
 
+            Arbol navidad = new Arbol();
+            navidad.setExpresionRegular(regEx);
+            Nodo nodoRaiz = navidad.crearNodoRaiz();;
+
             BobAFNThompson constructor = new BobAFNThompson(regEx);
             double iniTime = System.currentTimeMillis();
             Automata automataAFN = constructor.leerExpresionRegular();

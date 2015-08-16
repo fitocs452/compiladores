@@ -15,30 +15,66 @@ import java.util.Stack;
  * @author Anahi_Morales
  */
 public class Arbol {
+    private RegExConverter convertidor = new RegExConverter();
     private String expresionRegular;
-    private Stack<Nodo> pilaNodos;
+    private Stack<Nodo> pilaNodos = new Stack();
+    private Nodo nodoRaiz;
     
-    public void leerExpresion() {
-        for (int i = 0; i < this.expresionRegular.length(); i++) {
-            if (expresionRegular.charAt(i) != '|' ||
-                expresionRegular.charAt(i) != '*' ||
-                expresionRegular.charAt(i) != '.'
+    public Nodo crearNodoRaiz() {
+        Nodo nodo = new Nodo();
+        nodo.setExpresion(expresionRegular);
+        crearNodo(nodo);
+        return pilaNodos.pop();
+    }
+    
+    public void crearNodo(Nodo nodo) {
+        String expresion = nodo.getExpresion();
+        if (!expresion.isEmpty()) {
+            if (expresion.charAt(0) != '|' &&
+                expresion.charAt(0) != '*' &&
+                expresion.charAt(0) != '.'
             ) {
-                Nodo nodo = new Nodo();
-                nodo.setId(String.valueOf(expresionRegular.charAt(i)));
-                nodo.setExpresion(String.valueOf(expresionRegular.charAt(i + 1)));
+                Nodo nodoActual = new Nodo();
+
+                nodoActual.setId(String.valueOf(nodo.getExpresion().charAt(0)));
+                nodoActual.setExpresion(nodo.getExpresion().substring(1));
+                nodoActual.setIsHoja(true);
+                pilaNodos.push(nodoActual);
+
+                crearNodo(nodoActual);
             }
-            
-            if (expresionRegular.charAt(i) == '|') {
-            
+            if (nodo.getExpresion().charAt(0) == '|') {
+                Nodo nodoActual = new Nodo();
+
+                nodoActual.setId(String.valueOf(expresion.charAt(0)));
+                nodoActual.setExpresion(expresion.substring(1));
+                nodoActual.setNodoIzquierdo(pilaNodos.pop());
+                nodoActual.setNodoDerecho(pilaNodos.pop());
+
+                pilaNodos.push(nodoActual);
+                crearNodo(nodoActual);
             }
-            if (expresionRegular.charAt(i) == '*') {
-            
+            if (nodo.getExpresion().charAt(0) == '*') {
+                Nodo nodoActual = new Nodo();
+
+                nodoActual.setId(String.valueOf(nodo.getExpresion().charAt(0)));
+                nodoActual.setExpresion(expresion.substring(1));
+                nodoActual.setNodoDerecho(pilaNodos.pop());
+                
+                pilaNodos.push(nodoActual);
+                crearNodo(nodoActual);
             }
-            if (expresionRegular.charAt(i) == '.') {
-            
+            if (nodo.getExpresion().charAt(0) == '.') {
+                Nodo nodoActual = new Nodo();
+                nodoActual.setId(String.valueOf(nodo.getExpresion().charAt(0)));
+                nodoActual.setExpresion(expresion.substring(1));
+                nodoActual.setNodoDerecho(pilaNodos.pop());
+                nodoActual.setNodoIzquierdo(pilaNodos.pop());
+
+                pilaNodos.push(nodoActual);
+                crearNodo(nodoActual);
             }
-        }
+        }    
     }
 
     public String getExpresionRegular() {
@@ -46,6 +82,15 @@ public class Arbol {
     }
 
     public void setExpresionRegular(String expresionRegular) {
-        this.expresionRegular = new StringBuffer(expresionRegular).reverse().toString();
+        this.expresionRegular = convertidor.realizarConversiones(expresionRegular);
+        System.out.println(this.expresionRegular);
+    }
+
+    public Nodo getNodoRaiz() {
+        return nodoRaiz;
+    }
+
+    public void setNodoRaiz(Nodo nodoRaiz) {
+        this.nodoRaiz = nodoRaiz;
     }
 }
