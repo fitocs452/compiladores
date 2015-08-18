@@ -69,6 +69,6 @@ public class Nodo {
     }
     
     public String toString() {
-        return "idNodo: " + this.id + "";
+        return "idNodo: " + this.id + "IdNodoHoja: " + this.idNodoHoja;
     } 
 }

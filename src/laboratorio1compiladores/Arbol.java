@@ -8,6 +8,7 @@
 
 package laboratorio1compiladores;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -20,8 +21,8 @@ public class Arbol {
     private RegExConverter convertidor = new RegExConverter();
     private String expresionRegular;
     private Stack<Nodo> pilaNodos = new Stack();
-    private TreeSet<Nodo> nodosArbol;
-    
+    private ArrayList<Nodo> nodosArbol = new ArrayList();
+    private Nodo nodoRaiz;
     
     public Nodo crearNodoRaiz() {
         Nodo nodo = new Nodo();
@@ -65,7 +66,7 @@ public class Arbol {
 
                 nodoActual.setId(String.valueOf(nodo.getExpresion().charAt(0)));
                 nodoActual.setExpresion(expresion.substring(1));
-                nodoActual.setNodoDerecho(pilaNodos.pop());
+                nodoActual.setNodoIzquierdo(pilaNodos.pop());
                 
                 pilaNodos.push(nodoActual);
                 nodosArbol.add(nodoActual);
@@ -91,7 +92,44 @@ public class Arbol {
     }
 
     public void setExpresionRegular(String expresionRegular) {
-        this.expresionRegular = convertidor.realizarConversiones(expresionRegular);
+        this.expresionRegular = convertidor.realizarConversiones(expresionRegular + "#");
         System.out.println(this.expresionRegular);
+    }
+
+    public ArrayList<Nodo> getNodosArbol() {
+        return nodosArbol;
+    }
+
+    public void setNodosArbol(ArrayList<Nodo> nodosArbol) {
+        this.nodosArbol = nodosArbol;
+    }
+
+    public Nodo getNodoRaiz() {
+        return nodoRaiz;
+    }
+
+    public void setNodoRaiz(Nodo nodoRaiz) {
+        this.nodoRaiz = nodoRaiz;
+    }
+    
+    public void addNodoArbol(Nodo nodo) {
+        this.nodosArbol.add(nodo);
+    }
+    
+    public void ordenarNodosArbol(Arbol arbol) {
+        ArrayList<Nodo> arrayNodos = new ArrayList();
+        arrayNodos.addAll(arbol.getNodosArbol());
+        
+        int contNodos = 1;
+        
+        for (Nodo n: arrayNodos) {
+            if (n.getIsHoja()) {
+                n.setIdNodoHoja(contNodos);
+                System.out.println(n.getIdNodoHoja());
+                contNodos++;
+            }
+        }
+        
+        arbol.setNodosArbol(arrayNodos);
     }
 }

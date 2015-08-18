@@ -19,16 +19,23 @@ public class Laboratorio1Compiladores {
     public static void main(String[] args) {
         // TODO code application logic here
         ConvertidorAutomata convAuto = new ConvertidorAutomata();
+        ConstructorDirectoAFD afdDirecto = new ConstructorDirectoAFD();
         ArchivoTexto text = new ArchivoTexto();
         Scanner entrada = new Scanner(System.in);
         
-        try {            
-            System.out.println("Ingrese la expresión regular");
+                    System.out.println("Ingrese la expresión regular");
             String regEx = entrada.nextLine();
 
             Arbol navidad = new Arbol();
             navidad.setExpresionRegular(regEx);
-            Nodo nodoRaiz = navidad.crearNodoRaiz();;
+            Nodo nodoRaiz = navidad.crearNodoRaiz();
+            navidad.setNodoRaiz(nodoRaiz);
+            navidad.addNodoArbol(nodoRaiz);
+            navidad.ordenarNodosArbol(navidad);
+            
+            afdDirecto.crearAFD_Directo(navidad);
+            System.out.println(afdDirecto);
+        try {            
 
             BobAFNThompson constructor = new BobAFNThompson(regEx);
             double iniTime = System.currentTimeMillis();

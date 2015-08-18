@@ -15,6 +15,14 @@ public class Transicion {
     private Estado estadoInicial;
     private Estado estadoFinal;
 
+    public Transicion(String simbolo, Estado estadoInicial, Estado estadoFinal) {
+        this.simbolo = simbolo;
+        this.estadoInicial = estadoInicial;
+        this.estadoFinal = estadoFinal;
+    }
+
+    public Transicion() {}
+
     public String getSimbolo() {
         return simbolo;
     }
