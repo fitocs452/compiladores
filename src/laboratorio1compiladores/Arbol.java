@@ -8,7 +8,9 @@
 
 package laboratorio1compiladores;
 
+import java.util.HashSet;
 import java.util.Stack;
+import java.util.TreeSet;
 
 /**
  *
@@ -18,7 +20,8 @@ public class Arbol {
     private RegExConverter convertidor = new RegExConverter();
     private String expresionRegular;
     private Stack<Nodo> pilaNodos = new Stack();
-    private Nodo nodoRaiz;
+    private TreeSet<Nodo> nodosArbol;
+    
     
     public Nodo crearNodoRaiz() {
         Nodo nodo = new Nodo();
@@ -39,8 +42,10 @@ public class Arbol {
                 nodoActual.setId(String.valueOf(nodo.getExpresion().charAt(0)));
                 nodoActual.setExpresion(nodo.getExpresion().substring(1));
                 nodoActual.setIsHoja(true);
-                pilaNodos.push(nodoActual);
-
+                nodoActual.setIdNodoHoja(nodosArbol.size() + 1);
+                
+                pilaNodos.push(nodoActual);                
+                nodosArbol.add(nodoActual);
                 crearNodo(nodoActual);
             }
             if (nodo.getExpresion().charAt(0) == '|') {
@@ -52,6 +57,7 @@ public class Arbol {
                 nodoActual.setNodoDerecho(pilaNodos.pop());
 
                 pilaNodos.push(nodoActual);
+                nodosArbol.add(nodoActual);
                 crearNodo(nodoActual);
             }
             if (nodo.getExpresion().charAt(0) == '*') {
@@ -62,16 +68,19 @@ public class Arbol {
                 nodoActual.setNodoDerecho(pilaNodos.pop());
                 
                 pilaNodos.push(nodoActual);
+                nodosArbol.add(nodoActual);
                 crearNodo(nodoActual);
             }
             if (nodo.getExpresion().charAt(0) == '.') {
                 Nodo nodoActual = new Nodo();
+                
                 nodoActual.setId(String.valueOf(nodo.getExpresion().charAt(0)));
                 nodoActual.setExpresion(expresion.substring(1));
                 nodoActual.setNodoDerecho(pilaNodos.pop());
                 nodoActual.setNodoIzquierdo(pilaNodos.pop());
 
                 pilaNodos.push(nodoActual);
+                nodosArbol.add(nodoActual);
                 crearNodo(nodoActual);
             }
         }    
@@ -84,13 +93,5 @@ public class Arbol {
     public void setExpresionRegular(String expresionRegular) {
         this.expresionRegular = convertidor.realizarConversiones(expresionRegular);
         System.out.println(this.expresionRegular);
-    }
-
-    public Nodo getNodoRaiz() {
-        return nodoRaiz;
-    }
-
-    public void setNodoRaiz(Nodo nodoRaiz) {
-        this.nodoRaiz = nodoRaiz;
     }
 }

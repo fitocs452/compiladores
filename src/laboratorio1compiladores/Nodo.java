@@ -17,7 +17,7 @@ public class Nodo {
     private String expresion;
     private Nodo nodoDerecho;
     private Nodo nodoIzquierdo;
-    private int numNodoArbol;
+    private int idNodoHoja;
     private boolean isHoja;
 
     public String getId() {
@@ -52,12 +52,12 @@ public class Nodo {
         this.nodoIzquierdo = nodoIzquierdo;
     }
 
-    public int getNumNodoArbol() {
-        return numNodoArbol;
+    public int getIdNodoHoja() {
+        return idNodoHoja;
     }
 
-    public void setNumNodoArbol(int numNodoArbol) {
-        this.numNodoArbol = numNodoArbol;
+    public void setIdNodoHoja(int idNodoHoja) {
+        this.idNodoHoja = idNodoHoja;
     }
 
     public boolean getIsHoja() {
