@@ -218,7 +218,7 @@ public class ConstructorDirectoAFD {
         }
     }
 
-    public void crearAFD_Directo(Arbol arbol) {
+    public Automata crearAFD_Directo(Arbol arbol) {
         ArrayList<Nodo> nodosArbol = new ArrayList();
         nodosArbol.addAll(arbol.getNodosArbol());
 
@@ -230,7 +230,7 @@ public class ConstructorDirectoAFD {
             followPos(n);
         }
         
-        generarEstadosAutomata(arbol);
+        return generarEstadosAutomata(arbol);
     }
     
     public Automata generarEstadosAutomata (Arbol arbol) {

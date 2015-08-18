@@ -23,7 +23,10 @@ public class Laboratorio1Compiladores {
         ArchivoTexto text = new ArchivoTexto();
         Scanner entrada = new Scanner(System.in);
         
-                    System.out.println("Ingrese la expresión regular");
+
+            
+        try {            
+            System.out.println("Ingrese la expresión regular");
             String regEx = entrada.nextLine();
 
             Arbol navidad = new Arbol();
@@ -32,11 +35,10 @@ public class Laboratorio1Compiladores {
             navidad.setNodoRaiz(nodoRaiz);
             navidad.addNodoArbol(nodoRaiz);
             navidad.ordenarNodosArbol(navidad);
+            Automata afd_directo = afdDirecto.crearAFD_Directo(navidad);
+            System.out.println(afd_directo);
+            text.crearArchivoText("", "AutomataAFD_Directo.txt", afd_directo.toString());
             
-            afdDirecto.crearAFD_Directo(navidad);
-            System.out.println(afdDirecto);
-        try {            
-
             BobAFNThompson constructor = new BobAFNThompson(regEx);
             double iniTime = System.currentTimeMillis();
             Automata automataAFN = constructor.leerExpresionRegular();
