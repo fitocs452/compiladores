@@ -11,11 +11,8 @@ package laboratorio1compiladores;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
-import java.util.TreeSet;
 
 /**
  *
@@ -181,7 +178,7 @@ public class ConstructorDirectoAFD {
             System.out.println("Es kleen");
             ArrayList<Nodo> firstPos = firstPos(nodo);
             ArrayList<Nodo> lastPos = lastPos(nodo);
-            //first pos y lastpos del nodo
+            
             for (Nodo n: lastPos) {
                 int id = n.getIdNodoHoja();
                 if (tablaRelaciones.containsKey(id)) {
@@ -246,9 +243,6 @@ public class ConstructorDirectoAFD {
         estadoInicial.setIdentificador(0);
         afd.setEstadoInicial(estadoInicial);
         afd.addEstado(estadoInicial);
-        
-        //Nodo nodoRaiz = arbol.crearNodoRaiz();
-        //arbol.setNodoRaiz(nodoRaiz);
         
         ArrayList<Nodo> firstPosRoot = firstPos(arbol.getNodoRaiz());
         System.out.println("************* firstPosRoot *************");
