@@ -15,6 +15,7 @@ public class Estado {
     private int identificador;
     private ArrayList<Transicion> transiciones = new ArrayList();
     private ArrayList<Integer> idNodos = new ArrayList();
+    private ArrayList<Integer> idGrupoPertenece = new ArrayList();
             
     public int getIdentificador() {
         return identificador;
@@ -37,7 +38,7 @@ public class Estado {
     }
     
     public String toString() {
-        return String.valueOf(this.identificador) + " Nodos: " + idNodos;
+        return String.valueOf(this.identificador);
     }
 
     public ArrayList<Integer> getIdNodos() {
@@ -46,5 +47,13 @@ public class Estado {
 
     public void setIdNodos(ArrayList<Integer> idNodos) {
         this.idNodos = idNodos;
+    }
+
+    public ArrayList<Integer> getIdGrupoPertenece() {
+        return idGrupoPertenece;
+    }
+
+    public void setIdGrupoPertenece(ArrayList<Integer> idGrupoPertenece) {
+        this.idGrupoPertenece = idGrupoPertenece;
     }
 }

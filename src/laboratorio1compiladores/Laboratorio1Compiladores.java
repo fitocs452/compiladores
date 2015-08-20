@@ -24,8 +24,8 @@ public class Laboratorio1Compiladores {
         Scanner entrada = new Scanner(System.in);
         
 
-            
         try {            
+
             System.out.println("Ingrese la expresión regular");
             String regEx = entrada.nextLine();
 
@@ -35,20 +35,25 @@ public class Laboratorio1Compiladores {
             navidad.setNodoRaiz(nodoRaiz);
             navidad.addNodoArbol(nodoRaiz);
             navidad.ordenarNodosArbol(navidad);
-            Automata afd_directo = afdDirecto.crearAFD_Directo(navidad);
-            System.out.println(afd_directo);
-            text.crearArchivoText("", "AutomataAFD_Directo.txt", afd_directo.toString());
-            
-            /*BobAFNThompson constructor = new BobAFNThompson(regEx);
             double iniTime = System.currentTimeMillis();
-            Automata automataAFN = constructor.leerExpresionRegular();
+            Automata afd_directo = afdDirecto.crearAFD_Directo(navidad);
             double totalTime = System.currentTimeMillis() - iniTime;
+            System.out.println(afd_directo);
+            System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
+            text.crearArchivoText("", "AutomataAFD_Directo.txt", "AFD-Directo" ,afd_directo.toString(), String.valueOf(totalTime));
+            
+            afdDirecto.minimizacion(afd_directo);
+            
+            BobAFNThompson constructor = new BobAFNThompson(regEx);
+            iniTime = System.currentTimeMillis();
+            Automata automataAFN = constructor.leerExpresionRegular();
+            totalTime = System.currentTimeMillis() - iniTime;
             System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
             
             System.out.println(automataAFN.toString());
             //Simulación de autómata AFN
 
-            text.crearArchivoText("", "AutomataAFN.txt", automataAFN.toString());
+            text.crearArchivoText("", "AutomataAFN.txt", "AFN",automataAFN.toString(), String.valueOf(totalTime));
             
             iniTime = System.currentTimeMillis();
             Automata automataAFD = convAuto.convertirAFNtoAFD(automataAFN);
@@ -57,7 +62,7 @@ public class Laboratorio1Compiladores {
             System.out.println("Tiempo para hacer el AFD: " + totalTime + " ms");
             
             System.out.println(automataAFD.toString());
-            text.crearArchivoText("", "AutomataAFD.txt", automataAFD.toString());
+            text.crearArchivoText("", "AutomataAFD.txt", "AFN to AFD", automataAFD.toString(), String.valueOf(totalTime));
             
             System.out.println("Ingrese la expresión regular");
             String expresionSimular = entrada.nextLine();
@@ -75,7 +80,7 @@ public class Laboratorio1Compiladores {
             } else {
                 System.out.println("La expresión en el AFD NO fue aceptada");
             }
-            */
+            
         } catch (Exception e) {
             System.out.println("Expresión mal escrita");
         }

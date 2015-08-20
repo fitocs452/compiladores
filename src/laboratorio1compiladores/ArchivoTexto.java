@@ -19,12 +19,12 @@ public class ArchivoTexto {
     FileWriter archivo = null;
     PrintWriter pw = null;
     
-    public void crearArchivoText(String path, String nombreArchivo, String texto) {
+    public void crearArchivoText(String path, String nombreArchivo, String tipo, String texto, String tiempo) {
         try {
             archivo = new FileWriter(path + nombreArchivo);
             System.out.println("Archivo creado");
             pw = new PrintWriter(this.archivo);
-            pw.print(texto);
+            pw.print(tipo + "\r\n" + texto + "\r\n" + "Tiempo que tardó: " + tiempo + "ms");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

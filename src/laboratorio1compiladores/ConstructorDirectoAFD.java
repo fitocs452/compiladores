@@ -211,6 +211,7 @@ public class ConstructorDirectoAFD {
                 }
                 System.out.println(firstPos);
                 tablaRelaciones.put(id, firstPos);
+                firstPos = firstPos(nodo.getNodoDerecho());
             }
         }
     }
@@ -352,7 +353,6 @@ public class ConstructorDirectoAFD {
         Estado estadoActual = estadoInicial;
         System.out.println(tablaRelaciones);
         while (!noMarcados.isEmpty()) {
-            System.out.println("no marcados tiene algo");
             for (Character c: afd.getAlfabeto()) {
                 ArrayList<Integer> ids = estadoActual.getIdNodos();
                 System.out.println("Id Estados: " + ids);
@@ -369,7 +369,11 @@ public class ConstructorDirectoAFD {
                 
                 if (verificarIgualdadListas(tempId, ids)) {
                     System.out.println("TempId es igual a ids");
-                    estadoActual.addTransicion(new Transicion(String.valueOf(c), estadoActual, estadoActual));
+                    Transicion t = new Transicion(String.valueOf(c), estadoActual, estadoActual);
+                    estadoActual.addTransicion(t);
+                    System.out.println("-----------Transicion------------------");
+                    System.out.println(t);
+                    System.out.println("****************************************");
                 } else {
                     boolean contenido = false;
                     for (Estado e: noMarcados) {
@@ -439,7 +443,10 @@ public class ConstructorDirectoAFD {
                 list1.add(i2);
             }
         }
-        
+        System.out.println("Merge Arrays --------------------");
+        System.out.println(list1);
+        System.out.println(list2);
+        System.out.println("---------------------------------");
         return list1;
     }
     
@@ -471,5 +478,129 @@ public class ConstructorDirectoAFD {
             }
         }
         return aceptacion;
+    }
+    
+    public Automata minimizacion(Automata afd) {
+        Simulacion simulador = new Simulacion();
+        ArrayList<ArrayList<Estado>> particion = new ArrayList();
+        
+        ArrayList<Estado> estadosNoAceptacion = new ArrayList();
+        ArrayList<ArrayList<Integer>> grupoL = new ArrayList();
+        
+        particion.add(afd.getEstadosAceptacion());
+
+        for (Estado e: afd.getEstados()) {
+            if (!afd.getEstadosAceptacion().contains(e)) {
+                estadosNoAceptacion.add(e);
+            }
+        }
+        
+        particion.add(estadosNoAceptacion);
+        System.out.println("******** Primera particion *************");
+        System.out.println(particion);
+        System.out.println("**************///////*******************");
+        boolean salir = true;
+        while (salir) {
+            ArrayList<ArrayList<Estado>> NParticion = new ArrayList();
+            for (ArrayList<Estado> estados: particion) {
+                for (Estado estado: estados) {
+                    ArrayList<Integer> ds = new ArrayList();
+                    for (Character c: afd.getAlfabeto()) {
+                        Estado t = simulador.move(estado, String.valueOf(c));
+                        for (ArrayList<Estado> grupoH: particion) {
+                            if (grupoH.contains(t)) {
+                                int index = particion.indexOf(grupoH);
+                                if (!ds.contains(index)) {
+                                    ds.add(index);
+                                    estado.getIdGrupoPertenece().add(index);
+                                }
+                            }
+                        }
+                    }
+                    if (!grupoL.contains(ds)) {
+                        grupoL.add(ds);
+                    }
+                }
+                
+                ArrayList<ArrayList<Estado>> dx = new ArrayList();
+                for (Estado estado: estados) {
+                    ArrayList<Integer> idsGrupoPerteneceEstado = estado.getIdGrupoPertenece();
+                    if (dx.contains(idsGrupoPerteneceEstado)) {
+                        int i = dx.indexOf(idsGrupoPerteneceEstado);
+                        dx.get(i).add(estado);
+                    } else {
+                        ArrayList<Estado> temporal = new ArrayList();
+                        temporal.add(estado);
+                        dx.add(temporal);
+                    }
+                    //ArrayList<Integer> estadosAlcanzados = grupoL.get(i);
+                }
+                
+                for (ArrayList<Estado> states: dx) {
+                    NParticion.add(states);
+                }
+            }
+            System.out.println("****************** Particion ******************");
+            System.out.println(particion);
+            System.out.println("****************** --------- ******************");
+            
+            System.out.println("****************** Nueva Particion ******************");
+            System.out.println(NParticion);
+            System.out.println("****************** --------- ******************");
+            if (NParticion.equals(particion)) {
+                salir = false;
+            } else {
+                particion = NParticion;
+            }
+        }
+        
+        Automata automataMinimizado = new Automata();
+        System.out.println("Estados aceptacion: " + afd.getEstadosAceptacion());
+        System.out.println("Estado inicial: " + afd.getEstadoInicial());
+        HashMap<Estado, Estado> grupoMin = new HashMap();
+        int indexEstados = 0;
+        int index = 0;
+        for (ArrayList<Estado> estados: particion) {
+            Estado estado = new Estado();
+            estado.setIdentificador(indexEstados);
+            indexEstados++;
+            System.out.println("*** Estados: " + estados);
+            if (estados.contains(afd.getEstadoInicial())) {
+                automataMinimizado.setEstadoInicial(estado);
+            }
+            for (Estado e: afd.getEstadosAceptacion()) {
+                if (estados.contains(e)) {
+                    automataMinimizado.addEstadoAceptacion(estado);
+                }
+            }
+            automataMinimizado.addEstado(estado);
+            for (Estado e: estados) {
+                grupoMin.put(e, estado);
+            }
+
+            //    for (Transicion t: estados.get(i).getTransiciones()) {
+            //        if (!estados.contains(t.getEstadoFinal())) {
+                        //estado en la posicion i del automata original
+            //            estado.addTransicion(new Transicion(t.getSimbolo(), estado, automataMinimizado.getEstados().get(i)));
+            //        }
+            //    }
+            //}
+            index++;
+        }
+        System.out.println(grupoMin);
+        for (int i = 0; i < particion.size(); i++) {
+            Estado state = particion.get(i).get(0);
+            Estado estadoActual = automataMinimizado.getEstados().get(i);
+            
+            for (Transicion t: state.getTransiciones()) {
+                Estado estadoFinal = grupoMin.get(t.getEstadoFinal());
+                estadoActual.addTransicion(new Transicion(t.getSimbolo(), estadoActual, estadoFinal));
+            }
+        }
+        automataMinimizado.setAlfabeto(afd.getAlfabeto());
+        System.out.println("*******Automata Min**************");
+        System.out.println(automataMinimizado);
+        System.out.println("***********--------**************");
+        return null;
     }
 }

@@ -124,6 +124,4 @@ public class ConvertidorAutomata {
     public void setAutomata(Automata automata) {
         this.automata = automata;
     }
-    
-    
 }

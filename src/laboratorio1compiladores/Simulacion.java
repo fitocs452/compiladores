@@ -8,6 +8,7 @@
 
 package laboratorio1compiladores;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
@@ -47,5 +48,17 @@ public class Simulacion {
             }
         }
         return estados_finales;
+    }
+    
+    public Estado move(Estado estado, String simbolo) {
+        Estado estadoAlcanzado = new Estado();
+        
+        for (Transicion t: estado.getTransiciones()) {
+            Estado siguiente = t.getEstadoFinal();
+            if (t.getSimbolo().equals(simbolo)) {
+                estadoAlcanzado = t.getEstadoFinal();
+            }
+        }
+        return estadoAlcanzado;
     }
 }
