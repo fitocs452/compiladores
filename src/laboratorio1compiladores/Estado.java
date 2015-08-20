@@ -14,7 +14,8 @@ import java.util.ArrayList;
 public class Estado {
     private int identificador;
     private ArrayList<Transicion> transiciones = new ArrayList();
-
+    private ArrayList<Integer> idNodos = new ArrayList();
+            
     public int getIdentificador() {
         return identificador;
     }
@@ -36,6 +37,14 @@ public class Estado {
     }
     
     public String toString() {
-        return String.valueOf(this.identificador);
+        return String.valueOf(this.identificador) + " Nodos: " + idNodos;
+    }
+
+    public ArrayList<Integer> getIdNodos() {
+        return idNodos;
+    }
+
+    public void setIdNodos(ArrayList<Integer> idNodos) {
+        this.idNodos = idNodos;
     }
 }

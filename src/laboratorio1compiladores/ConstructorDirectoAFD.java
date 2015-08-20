@@ -227,17 +227,19 @@ public class ConstructorDirectoAFD {
             followPos(n);
         }
         
-        return generarEstadosAutomata(arbol);
+        return generarAutomata(arbol);
     }
     
     public Automata generarEstadosAutomata (Arbol arbol) {
         Automata afd = new Automata();
         setAlfabeto(afd, arbol);
-                System.out.println("***********TABLA RELACIONES ******************");
+        System.out.println("***********TABLA RELACIONES ******************");
         System.out.println(tablaRelaciones);
-                System.out.println("*****************************");
+        System.out.println("*****************************");
         ArrayList<ArrayList<Nodo>> estados = new ArrayList();
         Queue<ArrayList<Nodo>> colaArrayNodo = new LinkedList();
+        
+        ArrayList<Integer> tempIds = new ArrayList();
         
         Estado estadoInicial = new Estado();
         estadoInicial.setIdentificador(0);
@@ -245,6 +247,11 @@ public class ConstructorDirectoAFD {
         afd.addEstado(estadoInicial);
         
         ArrayList<Nodo> firstPosRoot = firstPos(arbol.getNodoRaiz());
+        for (Nodo n: firstPosRoot) {
+            tempIds.add(n.getIdNodoHoja());
+        }
+        estadoInicial.setIdNodos(tempIds);
+        
         System.out.println("************* firstPosRoot *************");
         System.out.println(firstPosRoot);
         System.out.println("****************************************");
@@ -277,14 +284,20 @@ public class ConstructorDirectoAFD {
                     }
                 }
                 
-                if (!estados.contains(temp)) {
+                if (!estados.contains(temp) && !colaArrayNodo.contains(temp)) {
                     Estado anterior = afd.getEstados().get(indexEstadoArray);
                     Estado siguiente = new Estado();
                     afd.addEstado(siguiente);
                     siguiente.setIdentificador(indexEstado);
                     indexEstado++;
                     
-                    anterior.addTransicion(new Transicion(String.valueOf(c), anterior, siguiente));
+                    ArrayList<Transicion> transiciones = anterior.getTransiciones();
+                    Transicion t = new Transicion(String.valueOf(c), anterior, siguiente);
+                    
+                    if (!transiciones.contains(t)) {
+                        anterior.addTransicion(t);
+                    }
+                    
                     colaArrayNodo.add(temp);
                     estados.add(temp);
                     
@@ -297,12 +310,106 @@ public class ConstructorDirectoAFD {
                    
                     Estado anterior = afd.getEstados().get(indexEstadoArray);
                     Estado siguiente = afd.getEstados().get(estados.indexOf(temp));
-                    anterior.addTransicion(new Transicion(String.valueOf(c),anterior, siguiente));
+                    
+                    ArrayList<Transicion> transiciones = anterior.getTransiciones();
+                    Transicion t = new Transicion(String.valueOf(c), anterior, siguiente);
+                    
+                    if (!transiciones.contains(t)) {
+                        anterior.addTransicion(t);
+                    }
                 }
             }
             indexEstadoArray++;
         }
         System.out.println(afd);
+        return afd;
+    }
+    
+    public Automata generarAutomata (Arbol arbol) {
+        Automata afd = new Automata();
+        setAlfabeto(afd, arbol);
+        System.out.println("***********TABLA RELACIONES ******************");
+        System.out.println(tablaRelaciones);
+        System.out.println("*****************************");
+        ArrayList<Estado> noMarcados = new ArrayList();
+        ArrayList<Estado> marcados = new ArrayList();
+        
+        ArrayList<Integer> tempIds = new ArrayList();
+        
+        Estado estadoInicial = new Estado();
+        estadoInicial.setIdentificador(0);
+        afd.setEstadoInicial(estadoInicial);
+        
+        ArrayList<Nodo> firstPosRoot = firstPos(arbol.getNodoRaiz());
+        
+        for (Nodo n: firstPosRoot) {
+            tempIds.add(n.getIdNodoHoja());
+        }
+        System.out.println("FirstPos: " + tempIds);
+        estadoInicial.setIdNodos(tempIds);
+        noMarcados.add(estadoInicial);
+        int indexEstado = 1;
+        Estado estadoActual = estadoInicial;
+        System.out.println(tablaRelaciones);
+        while (!noMarcados.isEmpty()) {
+            System.out.println("no marcados tiene algo");
+            for (Character c: afd.getAlfabeto()) {
+                ArrayList<Integer> ids = estadoActual.getIdNodos();
+                System.out.println("Id Estados: " + ids);
+                ArrayList<Integer> tempId = new ArrayList();
+                for (Integer n: ids) {
+                    Nodo nodoId = arbol.getNodoByIdNodoHoja(n);
+                    System.out.println("Nodo encontrado: " + nodoId);
+                    if (nodoId.getId().equals(String.valueOf(c))) {
+                        System.out.println("Tabla relaciones del nodo: " + getArrayIdFollow(tablaRelaciones.get(nodoId.getIdNodoHoja())));
+                        tempId = this.mergeArrays(tempId, getArrayIdFollow(tablaRelaciones.get(nodoId.getIdNodoHoja())));
+                    }
+                }
+                System.out.println("Temp id: " + tempId);
+                
+                if (verificarIgualdadListas(tempId, ids)) {
+                    System.out.println("TempId es igual a ids");
+                    estadoActual.addTransicion(new Transicion(String.valueOf(c), estadoActual, estadoActual));
+                } else {
+                    boolean contenido = false;
+                    for (Estado e: noMarcados) {
+                        if (verificarIgualdadListas(e.getIdNodos(), tempId)) {
+                            contenido = true;
+                            e.addTransicion(new Transicion(String.valueOf(c), estadoActual, e));
+                        }
+                    }
+                    for (Estado e: marcados) {
+                        if (verificarIgualdadListas(e.getIdNodos(), tempId)) {
+                            contenido = true;
+                            e.addTransicion(new Transicion(String.valueOf(c), estadoActual, e));
+                        }
+                    }
+                    if (contenido == false) {
+                        Estado estado = new Estado();
+                        estado.setIdentificador(indexEstado);
+                        estado.setIdNodos(tempId);
+                        
+                        indexEstado++;
+                        estadoActual.addTransicion(new Transicion(String.valueOf(c), estadoActual, estado));
+                        
+                        noMarcados.add(estado);
+                    }
+                }
+            }
+            marcados.add(estadoActual);
+            if (!noMarcados.isEmpty()) {
+                estadoActual = noMarcados.get(noMarcados.size() - 1);
+                noMarcados.remove(noMarcados.size() - 1);
+            }
+        }
+        afd.setEstados(marcados);
+        System.out.println("********************Marcados ********************");
+        System.out.println(marcados);
+        System.out.println("********************Marcados ********************");
+        Nodo nNumeral = arbol.getNodoById("#");
+        ArrayList<Estado> estadosAceptacion = new ArrayList();
+        estadosAceptacion = this.getEstadosAceptacion(marcados, nNumeral);
+        afd.setEstadosAceptacion(estadosAceptacion);
         return afd;
     }
     
@@ -316,5 +423,53 @@ public class ConstructorDirectoAFD {
                 System.out.println("Simbolo Alfabeto: " + id);
             }
         }
+    }
+    
+    public ArrayList<Integer> getArrayIdFollow (ArrayList<Nodo> nodos) {
+        ArrayList<Integer> returnArray = new ArrayList();
+        for (Nodo n: nodos) {
+            returnArray.add(n.getIdNodoHoja());
+        }
+        return returnArray;
+    }
+    
+    public ArrayList<Integer> mergeArrays (ArrayList<Integer> list1, ArrayList<Integer> list2) {
+        for (Integer i2: list2){
+            if (!list1.contains(i2)) {
+                list1.add(i2);
+            }
+        }
+        
+        return list1;
+    }
+    
+    public boolean verificarIgualdadListas (ArrayList<Integer> list1, ArrayList<Integer> list2) {
+        if (list1.size() != list2.size()) {
+            return false;
+        }
+        int contador = 0;
+        for (Integer i: list1) {
+            if (list2.contains(i)) {
+                contador++;
+            }
+        }
+        if (contador == list1.size()) {
+            return true;
+        }
+        return false;
+    }
+    
+    public ArrayList<Estado> getEstadosAceptacion(ArrayList<Estado> marcados, Nodo n) {
+        ArrayList<Estado> aceptacion = new ArrayList();
+        int nNumeralId = n.getIdNodoHoja();
+        for (Estado e: marcados) {
+            System.out.println("Nodo marcados: " + e.getIdNodos());
+            for (Integer i: e.getIdNodos()) {
+                if (i == nNumeralId) {
+                    aceptacion.add(e);
+                }
+            }
+        }
+        return aceptacion;
     }
 }

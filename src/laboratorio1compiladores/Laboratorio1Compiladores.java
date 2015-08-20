@@ -39,7 +39,7 @@ public class Laboratorio1Compiladores {
             System.out.println(afd_directo);
             text.crearArchivoText("", "AutomataAFD_Directo.txt", afd_directo.toString());
             
-            BobAFNThompson constructor = new BobAFNThompson(regEx);
+            /*BobAFNThompson constructor = new BobAFNThompson(regEx);
             double iniTime = System.currentTimeMillis();
             Automata automataAFN = constructor.leerExpresionRegular();
             double totalTime = System.currentTimeMillis() - iniTime;
@@ -75,7 +75,7 @@ public class Laboratorio1Compiladores {
             } else {
                 System.out.println("La expresión en el AFD NO fue aceptada");
             }
-            
+            */
         } catch (Exception e) {
             System.out.println("Expresión mal escrita");
         }

@@ -1,7 +1,7 @@
-﻿
+
 Automata 
 Alfabeto: [a, b]
-Estado inicial: 0
-Estados: [0, 1, 2, 3]
-Estado de aceptación: [3]
-Transiciones: [(0 - a - 1), (0 - b - 0)][(1 - a - 1), (1 - b - 2)][(2 - a - 1), (2 - b - 3), (2 - b - 3)][(3 - a - 1), (3 - b - 0)]
+Estado inicial: 0 Nodos: [1]
+Estados: [0 Nodos: [1], 2 Nodos: [], 1 Nodos: [3, 2]]
+Estado de aceptación: [1 Nodos: [3, 2]]
+Transiciones: [(0 Nodos: [1] - a - 1 Nodos: [3, 2]), (0 Nodos: [1] - b - 2 Nodos: [])][(2 Nodos: [] - a - 2 Nodos: []), (2 Nodos: [] - b - 2 Nodos: []), (1 Nodos: [3, 2] - a - 2 Nodos: [])][(1 Nodos: [3, 2] - b - 1 Nodos: [3, 2])]

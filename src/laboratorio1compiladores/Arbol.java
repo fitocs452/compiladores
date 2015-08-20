@@ -132,4 +132,26 @@ public class Arbol {
         
         arbol.setNodosArbol(arrayNodos);
     }
+    
+    public Nodo getNodoByIdNodoHoja(int id) {
+        for (Nodo n: this.nodosArbol) {
+            if (n.getIsHoja()) {
+                if (n.getIdNodoHoja() == id) {
+                    return n;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public Nodo getNodoById(String id) {
+        for (Nodo n: this.nodosArbol) {
+            if (n.getIsHoja()) {
+                if (n.getId().equals(id)) {
+                    return n;
+                }
+            }
+        }
+        return null;
+    }
 }
