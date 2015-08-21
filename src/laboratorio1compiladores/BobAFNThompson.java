@@ -11,7 +11,7 @@ import java.util.Stack;
 
 /**
  *
- * @author Anahi_Morales
+ * @author Adolfo_Morales
  */
 public class BobAFNThompson {
     private RegExConverter convertidor = new RegExConverter(); // Convertidor de infix to postfix con extras + ?
@@ -37,57 +37,57 @@ public class BobAFNThompson {
                 expresionRegular.charAt(i) != '.' &&
                 expresionRegular.charAt(i) != '*'
             ) {
-                System.out.println("-----------------------");
-                System.out.println("AFN básico");
+                //System.out.println("-----------------------");
+                //System.out.println("AFN básico");
                 automata = afnBasico(expresionRegular, i);
                 pilaAutomatas.push(automata);
-                System.out.println(automata);
-                System.out.println("-----------------------");
+                //System.out.println(automata);
+                //System.out.println("-----------------------");
             }
             
            if (expresionRegular.charAt(i) == '*') {
-               System.out.println("-----------------------");
-               System.out.println("AFN Kleen");
+               //System.out.println("-----------------------");
+               //System.out.println("AFN Kleen");
                Automata automataEnPila = pilaAutomatas.pop();
                automata = afnKleen(automataEnPila);
                pilaAutomatas.push(automata);
-               System.out.println(automata);
-               System.out.println("-----------------------");
+               //System.out.println(automata);
+               //System.out.println("-----------------------");
            }
            
            if (expresionRegular.charAt(i) == '.') {
-               System.out.println("-----------------------");
-               System.out.println("AFN concatenacion");
+               //System.out.println("-----------------------");
+               //System.out.println("AFN concatenacion");
                Automata primerAutomata = pilaAutomatas.pop();
                Automata segundoAutomata = pilaAutomatas.pop();
                
                automata = afnConcatenacion(primerAutomata, segundoAutomata);
                pilaAutomatas.push(automata);
-               System.out.println(automata);
-               System.out.println("-----------------------");
+               //System.out.println(automata);
+               //System.out.println("-----------------------");
            }
            
            if (expresionRegular.charAt(i) == '|') {
-               System.out.println("-----------------------");
-               System.out.println("AFN Or");
+               //System.out.println("-----------------------");
+               //System.out.println("AFN Or");
                Automata segundoAutomata = pilaAutomatas.pop();
                Automata primerAutomata = pilaAutomatas.pop();
                
                automata = afnOr(primerAutomata, segundoAutomata);
                pilaAutomatas.push(automata);
-               System.out.println(automata);
-               System.out.println("-----------------------");
+               //System.out.println(automata);
+               //System.out.println("-----------------------");
            }
         }
         
-        System.out.println("--------------------------------");
+        //System.out.println("--------------------------------");
         for (Estado e: automata.getEstados()){
             for (Transicion tran : e.getTransiciones()){
-                System.out.println(tran.getEstadoFinal());
-                System.out.println( tran.getEstadoFinal().getTransiciones());
+                //System.out.println(tran.getEstadoFinal());
+                //System.out.println( tran.getEstadoFinal().getTransiciones());
             }
         }
-        System.out.println("--------------------------------");
+        //System.out.println("--------------------------------");
         
         this.reconocerAlfabeto(automata);
         return automata;
@@ -207,7 +207,7 @@ public class BobAFNThompson {
         estadoFinal.setIdentificador(indexEstados);
         automataKleen.addEstado(estadoFinal);
 
-        System.out.println(automataKleen);
+        //System.out.println(automataKleen);
         
         return automataKleen;
     }
@@ -232,7 +232,7 @@ public class BobAFNThompson {
             ArrayList<Estado> estados = primerAutomata.getEstados();
             Estado estadoActual = estados.get(i);
             if (!automataConcatenado.getEstados().contains(estadoActual)) {
-                System.out.println(estadoActual.getIdentificador());
+                //System.out.println(estadoActual.getIdentificador());
                 estadoActual.setIdentificador(indexEstados);
                 indexEstados++;
                 automataConcatenado.addEstado(estadoActual);
@@ -298,7 +298,7 @@ public class BobAFNThompson {
         automataConcatenado.addEstado(estadoFinal);
         automataConcatenado.addEstadoAceptacion(estadoFinal);
         
-        System.out.println(automataConcatenado);
+        //System.out.println(automataConcatenado);
         return automataConcatenado;
     }
     
@@ -386,7 +386,7 @@ public class BobAFNThompson {
         automataOr.addEstado(estadoFinal);
         automataOr.addEstadoAceptacion(estadoFinal);
         
-        System.out.println(automataOr);
+        //System.out.println(automataOr);
         return automataOr;
     }
     

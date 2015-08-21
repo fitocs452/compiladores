@@ -19,6 +19,7 @@ import java.util.Queue;
  * @author Anahi_Morales
  */
 public class ConstructorDirectoAFD {
+    private Simulacion simulador = new Simulacion();
     private HashSet<Nodo> nodosArbol;
     private HashMap<Integer, ArrayList<Nodo>> tablaRelaciones = new HashMap();
     private Automata AFD;
@@ -42,8 +43,8 @@ public class ConstructorDirectoAFD {
     
     public ArrayList<Nodo> firstPos(Nodo nodo) {
         ArrayList<Nodo> nodos = new ArrayList();
-        System.out.println(nodo);
-        System.out.println("FirstPos: " + nodo.getId());
+        //System.out.println(nodo);
+        //System.out.println("FirstPos: " + nodo.getId());
         String simbolo = nodo.getId();
         if (simbolo.equals("€")) {
             return nodos;
@@ -173,9 +174,9 @@ public class ConstructorDirectoAFD {
     public void followPos(Nodo nodo) {
 
         String simbolo = nodo.getId();
-        System.out.println("Simbolo: " + simbolo);
+        //System.out.println("Simbolo: " + simbolo);
         if (simbolo.equals("*")) {
-            System.out.println("Es kleen");
+            //System.out.println("Es kleen");
             ArrayList<Nodo> firstPos = firstPos(nodo);
             ArrayList<Nodo> lastPos = lastPos(nodo);
             
@@ -189,15 +190,15 @@ public class ConstructorDirectoAFD {
                         }
                     }
                 }
-                System.out.println(firstPos);
+                //System.out.println(firstPos);
                 tablaRelaciones.put(id, firstPos);
             }
         }
         if (simbolo.equals(".")) {
-            System.out.println("Es concatenacion");
+            //System.out.println("Es concatenacion");
             ArrayList<Nodo> firstPos = firstPos(nodo.getNodoDerecho());
             ArrayList<Nodo> lastPos = lastPos(nodo.getNodoIzquierdo());
-            System.out.println("Tabla size: " + tablaRelaciones.size());
+            //System.out.println("Tabla size: " + tablaRelaciones.size());
             for (Nodo n: lastPos) {
                 int id = n.getIdNodoHoja();
                 
@@ -209,7 +210,7 @@ public class ConstructorDirectoAFD {
                         }
                     }
                 }
-                System.out.println(firstPos);
+                //System.out.println(firstPos);
                 tablaRelaciones.put(id, firstPos);
                 firstPos = firstPos(nodo.getNodoDerecho());
             }
@@ -220,9 +221,9 @@ public class ConstructorDirectoAFD {
         ArrayList<Nodo> nodosArbol = new ArrayList();
         nodosArbol.addAll(arbol.getNodosArbol());
 
-        System.out.println("********* NODOS ARBOL ********************");
-        System.out.println(nodosArbol);
-        System.out.println("*****************************");
+        //System.out.println("********* NODOS ARBOL ********************");
+        //System.out.println(nodosArbol);
+        //System.out.println("*****************************");
         
         for (Nodo n: nodosArbol) {
             followPos(n);
@@ -234,9 +235,9 @@ public class ConstructorDirectoAFD {
     public Automata generarEstadosAutomata (Arbol arbol) {
         Automata afd = new Automata();
         setAlfabeto(afd, arbol);
-        System.out.println("***********TABLA RELACIONES ******************");
-        System.out.println(tablaRelaciones);
-        System.out.println("*****************************");
+        //System.out.println("***********TABLA RELACIONES ******************");
+        //System.out.println(tablaRelaciones);
+        //System.out.println("*****************************");
         ArrayList<ArrayList<Nodo>> estados = new ArrayList();
         Queue<ArrayList<Nodo>> colaArrayNodo = new LinkedList();
         
@@ -253,9 +254,9 @@ public class ConstructorDirectoAFD {
         }
         estadoInicial.setIdNodos(tempIds);
         
-        System.out.println("************* firstPosRoot *************");
-        System.out.println(firstPosRoot);
-        System.out.println("****************************************");
+        //System.out.println("************* firstPosRoot *************");
+        //System.out.println(firstPosRoot);
+        //System.out.println("****************************************");
         estados.add(firstPosRoot);
         colaArrayNodo.add(firstPosRoot);
         
@@ -270,17 +271,17 @@ public class ConstructorDirectoAFD {
         
         while (!colaArrayNodo.isEmpty()) {
             ArrayList<Nodo> arrayActual = colaArrayNodo.poll();
-            System.out.println("*********** Array Actual *****************");
-            System.out.println(arrayActual);
-            System.out.println("**********************************");
+            //System.out.println("*********** Array Actual *****************");
+            //System.out.println(arrayActual);
+            //System.out.println("**********************************");
             for (Character c: afd.getAlfabeto()) {
                 ArrayList<Nodo> temp = new ArrayList();
                 
                 for (Nodo n: arrayActual) {
                     if (n.getId().equals(String.valueOf(c))) {
-                        System.out.println("Index: " + n.getIdNodoHoja());
-                        System.out.println("Tamaño tabla: " + tablaRelaciones.size());
-                        System.out.println(tablaRelaciones);
+                        //System.out.println("Index: " + n.getIdNodoHoja());
+                        //System.out.println("Tamaño tabla: " + tablaRelaciones.size());
+                        //System.out.println(tablaRelaciones);
                         temp.addAll(tablaRelaciones.get(n.getIdNodoHoja()));
                     }
                 }
@@ -322,16 +323,16 @@ public class ConstructorDirectoAFD {
             }
             indexEstadoArray++;
         }
-        System.out.println(afd);
+        //System.out.println(afd);
         return afd;
     }
     
     public Automata generarAutomata (Arbol arbol) {
         Automata afd = new Automata();
         setAlfabeto(afd, arbol);
-        System.out.println("***********TABLA RELACIONES ******************");
-        System.out.println(tablaRelaciones);
-        System.out.println("*****************************");
+        //System.out.println("***********TABLA RELACIONES ******************");
+        //System.out.println(tablaRelaciones);
+        //System.out.println("*****************************");
         ArrayList<Estado> noMarcados = new ArrayList();
         ArrayList<Estado> marcados = new ArrayList();
         
@@ -346,34 +347,34 @@ public class ConstructorDirectoAFD {
         for (Nodo n: firstPosRoot) {
             tempIds.add(n.getIdNodoHoja());
         }
-        System.out.println("FirstPos: " + tempIds);
+        //System.out.println("FirstPos: " + tempIds);
         estadoInicial.setIdNodos(tempIds);
         noMarcados.add(estadoInicial);
         int indexEstado = 1;
         Estado estadoActual = estadoInicial;
-        System.out.println(tablaRelaciones);
+        //System.out.println(tablaRelaciones);
         while (!noMarcados.isEmpty()) {
             for (Character c: afd.getAlfabeto()) {
                 ArrayList<Integer> ids = estadoActual.getIdNodos();
-                System.out.println("Id Estados: " + ids);
+                //System.out.println("Id Estados: " + ids);
                 ArrayList<Integer> tempId = new ArrayList();
                 for (Integer n: ids) {
                     Nodo nodoId = arbol.getNodoByIdNodoHoja(n);
-                    System.out.println("Nodo encontrado: " + nodoId);
+                    //System.out.println("Nodo encontrado: " + nodoId);
                     if (nodoId.getId().equals(String.valueOf(c))) {
-                        System.out.println("Tabla relaciones del nodo: " + getArrayIdFollow(tablaRelaciones.get(nodoId.getIdNodoHoja())));
+                        //System.out.println("Tabla relaciones del nodo: " + getArrayIdFollow(tablaRelaciones.get(nodoId.getIdNodoHoja())));
                         tempId = this.mergeArrays(tempId, getArrayIdFollow(tablaRelaciones.get(nodoId.getIdNodoHoja())));
                     }
                 }
-                System.out.println("Temp id: " + tempId);
+                //System.out.println("Temp id: " + tempId);
                 
                 if (verificarIgualdadListas(tempId, ids)) {
-                    System.out.println("TempId es igual a ids");
+                    //System.out.println("TempId es igual a ids");
                     Transicion t = new Transicion(String.valueOf(c), estadoActual, estadoActual);
                     estadoActual.addTransicion(t);
-                    System.out.println("-----------Transicion------------------");
-                    System.out.println(t);
-                    System.out.println("****************************************");
+                    //System.out.println("-----------Transicion------------------");
+                    //System.out.println(t);
+                    //System.out.println("****************************************");
                 } else {
                     boolean contenido = false;
                     for (Estado e: noMarcados) {
@@ -407,9 +408,9 @@ public class ConstructorDirectoAFD {
             }
         }
         afd.setEstados(marcados);
-        System.out.println("********************Marcados ********************");
-        System.out.println(marcados);
-        System.out.println("********************Marcados ********************");
+        //System.out.println("********************Marcados ********************");
+        //System.out.println(marcados);
+        //System.out.println("********************Marcados ********************");
         Nodo nNumeral = arbol.getNodoById("#");
         ArrayList<Estado> estadosAceptacion = new ArrayList();
         estadosAceptacion = this.getEstadosAceptacion(marcados, nNumeral);
@@ -424,7 +425,7 @@ public class ConstructorDirectoAFD {
                 Character id = n.getId().toCharArray()[0];
                 if (!automata.getAlfabeto().contains(id) && id != '#')
                 automata.addSimboloAlfabeto(id);
-                System.out.println("Simbolo Alfabeto: " + id);
+                //System.out.println("Simbolo Alfabeto: " + id);
             }
         }
     }
@@ -443,10 +444,10 @@ public class ConstructorDirectoAFD {
                 list1.add(i2);
             }
         }
-        System.out.println("Merge Arrays --------------------");
-        System.out.println(list1);
-        System.out.println(list2);
-        System.out.println("---------------------------------");
+        //System.out.println("Merge Arrays --------------------");
+        //System.out.println(list1);
+       // System.out.println(list2);
+        //System.out.println("---------------------------------");
         return list1;
     }
     
@@ -470,7 +471,7 @@ public class ConstructorDirectoAFD {
         ArrayList<Estado> aceptacion = new ArrayList();
         int nNumeralId = n.getIdNodoHoja();
         for (Estado e: marcados) {
-            System.out.println("Nodo marcados: " + e.getIdNodos());
+            //System.out.println("Nodo marcados: " + e.getIdNodos());
             for (Integer i: e.getIdNodos()) {
                 if (i == nNumeralId) {
                     aceptacion.add(e);
@@ -496,9 +497,9 @@ public class ConstructorDirectoAFD {
         }
         
         particion.add(estadosNoAceptacion);
-        System.out.println("******** Primera particion *************");
-        System.out.println(particion);
-        System.out.println("**************///////*******************");
+        //System.out.println("******** Primera particion *************");
+        //System.out.println(particion);
+        //System.out.println("**************///////*******************");
         boolean salir = true;
         while (salir) {
             ArrayList<ArrayList<Estado>> NParticion = new ArrayList();
@@ -540,9 +541,9 @@ public class ConstructorDirectoAFD {
                     NParticion.add(states);
                 }
             }
-            System.out.println("****************** Particion ******************");
-            System.out.println(particion);
-            System.out.println("****************** --------- ******************");
+            //System.out.println("****************** Particion ******************");
+            //System.out.println(particion);
+            //System.out.println("****************** --------- ******************");
             
             System.out.println("****************** Nueva Particion ******************");
             System.out.println(NParticion);
@@ -555,8 +556,8 @@ public class ConstructorDirectoAFD {
         }
         
         Automata automataMinimizado = new Automata();
-        System.out.println("Estados aceptacion: " + afd.getEstadosAceptacion());
-        System.out.println("Estado inicial: " + afd.getEstadoInicial());
+        //System.out.println("Estados aceptacion: " + afd.getEstadosAceptacion());
+        //System.out.println("Estado inicial: " + afd.getEstadoInicial());
         HashMap<Estado, Estado> grupoMin = new HashMap();
         int indexEstados = 0;
         int index = 0;
@@ -564,7 +565,7 @@ public class ConstructorDirectoAFD {
             Estado estado = new Estado();
             estado.setIdentificador(indexEstados);
             indexEstados++;
-            System.out.println("*** Estados: " + estados);
+            //System.out.println("*** Estados: " + estados);
             if (estados.contains(afd.getEstadoInicial())) {
                 automataMinimizado.setEstadoInicial(estado);
             }
@@ -603,4 +604,37 @@ public class ConstructorDirectoAFD {
         System.out.println("***********--------**************");
         return null;
     }
+ 
+     public boolean simular (Automata automata, String expReg) {
+        //Para simular primero se hace un eClosure del estado inicial
+        Estado estado_inicial = automata.getEstadoInicial();
+        HashSet<Estado> estados = simulador.eClosure(estado_inicial);
+        
+        for (int i = 0; i < expReg.length(); i++) {    
+            HashSet<Estado> estados_finales = new HashSet();
+            //Se hace un move con el simbolo del alfabeto al subconjuno del eClosure "estados"
+            HashSet<Estado> estados_intermedios = simulador.move(estados, String.valueOf(expReg.charAt(i)));
+            for (Estado e: estados_intermedios) {
+                //Se hace un eClosure por cada uno de los estados devueltos luego del move
+                HashSet<Estado> estadosFin = simulador.eClosure(e);
+                //Unimos todos los estados devueltos del move a Hash en donde no se aceptan estados repetidos
+                //dado que cada uno de estos subconjuntos, es parte de uno solo
+                estados_finales.addAll(estadosFin);
+            }
+            //se hace recursivo de ésta manera
+            estados = estados_finales;
+        }
+        
+        boolean aceptado = false;
+        //Se verifica sí el estado de aceptación del autómata se encuentra en el arreglo
+        // devuelto de la simulación
+        for (Estado e: automata.getEstadosAceptacion()) {
+            if (estados.contains(e)) {
+                //Sí lo contiene se acepta la expresión
+                aceptado = true;
+            }
+        }
+        return aceptado;
+        //5b899329f8
+    }   
 }

@@ -68,7 +68,14 @@ public class Laboratorio1Compiladores {
             String expresionSimular = entrada.nextLine();
             
             boolean simularAFN = constructor.simular(expresionSimular);
+            totalTime = System.currentTimeMillis() - iniTime;
+            System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
             boolean simularAFD = convAuto.simular(expresionSimular);
+            totalTime = System.currentTimeMillis() - iniTime;
+            System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
+            boolean simularDirecto = afdDirecto.simular(afd_directo, expresionSimular);
+            totalTime = System.currentTimeMillis() - iniTime;
+            System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
             if(simularAFN) {
                 System.out.println("La expresión en el AFN fue aceptada");
             } else {
@@ -81,6 +88,11 @@ public class Laboratorio1Compiladores {
                 System.out.println("La expresión en el AFD NO fue aceptada");
             }
             
+            if(simularDirecto) {
+                System.out.println("La expresión en el AFD Directo fue aceptada");
+            } else {
+                System.out.println("La expresión en el AFD Directo NO fue aceptada");
+            }
         } catch (Exception e) {
             System.out.println("Expresión mal escrita");
         }
