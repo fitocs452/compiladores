@@ -3,8 +3,8 @@ AFD-Directo
 Automata 
 Alfabeto: [a, b]
 Estado inicial: 0
-Estados: [0, 1, 2, 3]
-Estado de aceptación: [3]
-Transiciones: [(0 - a - 1), (0 - b - 0), (3 - b - 0), (3 - b - 0)][(1 - a - 1), (1 - b - 2), (2 - a - 1), (3 - a - 1)][(2 - b - 3)][]
+Estados: [0, 2, 1, 3, 4]
+Estado de aceptación: [4]
+Transiciones: [(0 - a - 1), (0 - b - 2)][(2 - a - 2), (2 - b - 2), (1 - a - 2), (3 - a - 2), (4 - a - 2), (4 - b - 2)][(1 - b - 3)][(3 - b - 4)][]
 
-Tiempo que tardó: 2.0ms
+Tiempo que tardó: 3.0ms

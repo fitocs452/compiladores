@@ -67,15 +67,21 @@ public class Laboratorio1Compiladores {
             System.out.println("Ingrese la expresión regular");
             String expresionSimular = entrada.nextLine();
             
+            iniTime = System.currentTimeMillis();
             boolean simularAFN = constructor.simular(expresionSimular);
             totalTime = System.currentTimeMillis() - iniTime;
-            System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
+            System.out.println("Tiempo para simular el AFN: " + totalTime + " ms");
+            
+            iniTime = System.currentTimeMillis();
             boolean simularAFD = convAuto.simular(expresionSimular);
             totalTime = System.currentTimeMillis() - iniTime;
-            System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
+            System.out.println("Tiempo para simular el AFD_Convertido: " + totalTime + " ms");
+            
+            iniTime = System.currentTimeMillis();
             boolean simularDirecto = afdDirecto.simular(afd_directo, expresionSimular);
             totalTime = System.currentTimeMillis() - iniTime;
-            System.out.println("Tiempo para hacer el AFN: " + totalTime + " ms");
+            System.out.println("Tiempo para simular el AFD_Directo: " + totalTime + " ms");
+            
             if(simularAFN) {
                 System.out.println("La expresión en el AFN fue aceptada");
             } else {
